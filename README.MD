@@ -121,7 +121,7 @@ analyze_midi.analyze('data/example_midis/000a2a3abdeb6e47294800a45015153d-4-4.mi
 The script should directly launch sonic visualizer with the chord, key annotations and rendered audio loaded. It also contains some feature maps for each subtask:
 
 1. Chord Estimation: Chroma and Bass
-2. Key Estimation: Scale (Key Signature)
+2. Key Estimation: Scale (Key Signature) and Cadence
 
 Below is an example screenshot for the predicted chromagram and bass feature maps:
 
