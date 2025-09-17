@@ -5,6 +5,9 @@ The official repository for the ISMIR 2025 LBD: **The Music Labels Itself: Conte
 Arxiv Link: TBA
 
 ![sv_screenshot.png](screenshots/sv_screenshot.png)
+
+![method.png](screenshots/method.png)
+
 ## MALD Dataset
 
 Containing 350,000 MIDI files with chord, key annotation. MIDI files are from the [Los Angeles (LA) collection](https://github.com/asigalov61/Los-Angeles-MIDI-Dataset).
