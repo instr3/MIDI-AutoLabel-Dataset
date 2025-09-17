@@ -4,6 +4,7 @@ The official repository for the ISMIR 2025 LBD: **The Music Labels Itself: Conte
 
 Arxiv Link: TBA
 
+![sv_screenshot.png](screenshots/sv_screenshot.png)
 ## MALD Dataset
 
 Containing 350,000 MIDI files with chord, key annotation. MIDI files are from the [Los Angeles (LA) collection](https://github.com/asigalov61/Los-Angeles-MIDI-Dataset).
@@ -105,9 +106,24 @@ If it fails to launch sonic visualizer, you can manually set the path of your so
 SONIC_VISUALIZER_PATH="/home/admin/sonic_visualiser/sonic visualiser"
 ```
 
+Also remember to install:
+
+1. The soundfont to `data/FluidR3_GM.sf2` (download [here](https://member.keymusician.com/Member/FluidR3_GM/index.html)).
+2. Fluidsynth (e.g., `sudo apt install fluidsynth` on Ubuntu).
+
 Then run the inference again with `visualize=True`.
 
 ```python
 import analyze_midi
 analyze_midi.analyze('data/example_midis/000a2a3abdeb6e47294800a45015153d-4-4.mid', use_supervised_model=True, visualize=True)
 ```
+
+The script should directly launch sonic visualizer with the chord, key annotations and rendered audio loaded. It also contains some feature maps for each subtask:
+
+1. Chord Estimation: Chroma and Bass
+2. Key Estimation: Scale (Key Signature)
+
+Below is an example screenshot for the predicted chromagram and bass feature maps:
+
+![sv_screenshot2.png](screenshots/sv_screenshot_2.png)
+
