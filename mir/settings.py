@@ -1,0 +1,3 @@
+SONIC_VISUALIZER_PATH="sonic visualiser"
+SONIC_ANNOTATOR_PATH="sonic-annotator"
+DEFAULT_DATA_STORAGE_PATH=""
