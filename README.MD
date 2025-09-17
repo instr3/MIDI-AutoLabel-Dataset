@@ -86,14 +86,14 @@ pip install -r requirements.txt
 To run inference on example files:
 
 ```bash
-python analyze_midi.py
+python main.py
 ```
 
 To run inference on custom MIDI files:
 
 ```python
-import analyze_midi
-analyze_midi.analyze('data/example_midis/000a2a3abdeb6e47294800a45015153d-4-4.mid', use_supervised_model=True, visualize=False)
+from main import analyze
+analyze('data/example_midis/000a2a3abdeb6e47294800a45015153d-4-4.mid', use_supervised_model=True, visualize=False)
 ```
 
 ### Visualize the inference results
@@ -114,8 +114,8 @@ Also remember to install:
 Then run the inference again with `visualize=True`.
 
 ```python
-import analyze_midi
-analyze_midi.analyze('data/example_midis/000a2a3abdeb6e47294800a45015153d-4-4.mid', use_supervised_model=True, visualize=True)
+from main import analyze
+analyze('data/example_midis/000a2a3abdeb6e47294800a45015153d-4-4.mid', use_supervised_model=True, visualize=True)
 ```
 
 The script should directly launch sonic visualizer with the chord, key annotations and rendered audio loaded. It also contains some feature maps for each subtask:
