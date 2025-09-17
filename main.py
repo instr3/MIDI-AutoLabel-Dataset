@@ -10,6 +10,7 @@ import torch
 from settings import RWC_DATASET_PATH
 from hmm import hmm_decode
 from key_names import NUM_TO_SCALE_SIMPLE
+from correct_chord_spelling import correct_chord_spelling
 
 
 def analyze(midi_path, use_supervised_model, visualize=True):
@@ -45,7 +46,22 @@ def analyze(midi_path, use_supervised_model, visualize=True):
     else:
         bass_model = RoformerProberChord.load_from_checkpoint('ckpt/midi-unsupervised-models/cp_transformer_yinyang_probe_encoder_chroma_v0.5_batch_160_la_bass_16_v2.epoch=00.val_loss=0.10736.ckpt', strict=False)
         chord_model = RoformerProberChord.load_from_checkpoint('ckpt/midi-unsupervised-models/cp_transformer_yinyang_probe_encoder_chroma_v0.4_batch_160_la_chords_16_v8_chroma.epoch=00.val_loss=0.15761.ckpt', strict=False)
-    chord, chord_lab = model_chord_probe(chord_model, midi_path, n_samples=1, batch_size=4, write_to_file=False, return_raw_output=True, bass_model=bass_model, return_chord_lab=True)
+    chord, raw_chord_lab = model_chord_probe(chord_model, midi_path, n_samples=1, batch_size=4, write_to_file=False, return_raw_output=True, bass_model=bass_model, return_chord_lab=True)
+    # Correct chord spelling under the estimated key (e.g., C#:maj -> Db:maj for some keys)
+
+    key_starts = np.array([float(line[0]) for line in key_lab], dtype=np.float32)
+    key_labels = [line[2] for line in key_lab]
+    def get_key_at_time(perf_time):
+        idx = np.searchsorted(key_starts, perf_time) - 1
+        if idx < 0:
+            return key_labels[0]
+        return key_labels[idx]
+    chord_lab = []
+    for chord_item in raw_chord_lab:
+        start_time = chord_item[0]
+        end_time = chord_item[1]
+        chord_label = correct_chord_spelling(chord_item[2], get_key_at_time((start_time + end_time) / 2))
+        chord_lab.append([start_time, end_time, chord_label])
     if visualize:
         chord = chord[:len(beats)]
         key = key[:len(beats)].cpu().numpy()
@@ -79,3 +95,4 @@ def analyze(midi_path, use_supervised_model, visualize=True):
 if __name__ == '__main__':
     analyze('data/example_midis/000a2a3abdeb6e47294800a45015153d-4-4.mid', use_supervised_model=True, visualize=False)
     analyze('data/example_midis/000c176cd4886471b8298f53b6d903bb.mid', use_supervised_model=True, visualize=False)
+    analyze('data/example_midis/032f5bbb8a7ad4dfa25bc925c0c25ea5_fix.mid', use_supervised_model=True, visualize=False)
