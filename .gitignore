@@ -10,7 +10,6 @@ __pycache__/
 
 # Temporary files
 *.tmp
-/settings.py
 /temp
 /tb_logs
 /ckpt
