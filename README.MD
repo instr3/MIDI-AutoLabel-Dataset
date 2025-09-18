@@ -34,6 +34,8 @@ Performance comparison:
 Key data
 
 * v1-supervised > v1-unsupervised, since v1-supervised is further fine-tuned on 100 human-annotated songs.
+** On Nottingham dataset (melody+chord), weighted score (mir_eval asymmetrical) of v1-supervised vs v1-unsupervised: 0.942 vs 0.902
+** On Nottingham dataset (melody only), weighted score (mir_eval asymmetrical) of v1-supervised vs v1-unsupervised: 0.976 vs 0.961
 * For songs with key changes, both datasets often fail to annotate the exact position of key changes.
 * Notice: v1-supervised is not the same as the "supervised" baseline in the paper.
 
