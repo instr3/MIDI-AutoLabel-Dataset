@@ -24,7 +24,7 @@ dataset/
 │   ├── decoded_chords/       # Chord annotations
 │   ├── decoded_keys/         # Key annotations
 │   ├── decoded_keys_majmin/  # Key annotations, reduced to major/minor modes
-├── v1-supervised.zip/        # Supervised version (unsupervised model, but further fine-tuned on RWC Pop)
+├── v1-supervised.zip/        # Supervised version (further fine-tuned on RWC Pop)
 │   ├── decoded_chords/       # Chord annotations
 │   ├── decoded_keys/         # Key annotations
 ```
