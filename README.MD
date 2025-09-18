@@ -29,6 +29,18 @@ dataset/
 │   ├── decoded_keys/         # Key annotations
 ```
 
+Performance comparison:
+
+Key data
+
+* v1-supervised > v1-unsupervised, since v1-supervised is further fine-tuned on 100 human-annotated songs.
+* For songs with key changes, both datasets often fail to annotate the exact position of key changes.
+* Notice: v1-supervised is not the same as the "supervised" baseline in the paper.
+
+Chord data
+
+* v1-supervised and v1-unsupervised have similar performance. v1-supervised tends to predict 7, 9 and other complex chords less often compared to v1-unsupervised.
+
 ### MIDI Files
 
 Please download the original MIDI files from the [Los Angeles (LA) collection](https://github.com/asigalov61/Los-Angeles-MIDI-Dataset). The filenames in the dataset correspond to those in the LA collection.
