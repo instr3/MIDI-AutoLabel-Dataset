@@ -6,6 +6,7 @@ import os
 import numpy as np
 import sys
 from baselines.exported_midi_chord_recognition.main import rule_based_chord_recognition
+from cp_transformer_probe_chord import RoformerProberChord
 try:
     from baselines.chorder_chord_eval import extract_chord_chorder
 except:
@@ -245,14 +246,41 @@ def oracle_chord_recognition(midi_path):
     bass_data, chroma_data = rule_based_chord_recognition(midi, return_chroma=True)
     return rule_based_chord_recognition(midi_path, replace_chroma=(bass_data, chroma_data))
 
-def madmom_chord_recognition(midi_path):
-    # Find the wave file corresponding to the MIDI file
-    file_name = os.path.basename(midi_path)
-    wave_file = os.path.join(os.path.dirname(midi_path), '..', 'wav', file_name.replace('.MID', '.wav'))
-    from madmom.audio.chroma import DeepChromaProcessor
-    from madmom.features.chords import DeepChromaChordRecognitionProcessor
-    chroma_processor = DeepChromaProcessor()
-    decode_processor = DeepChromaChordRecognitionProcessor()
-    chroma = chroma_processor(wave_file)
-    est_labels = decode_processor(chroma)
-    return est_labels
+def perform_eval_probe(model_name, bass_model_name, dataset_name, split, n_samples=1, batch_size=4):
+    torch.random.manual_seed(42)
+    np.random.seed(42)
+    model_dir = model_name.split('.epoch')[0]
+    if os.path.exists(f'ckpt/{model_name}'):
+        model_path = f'ckpt/{model_name}'
+    elif os.path.exists(f'ckpt/{model_dir}'):
+        model_path = f'ckpt/{model_dir}/{model_name}'
+    else:
+        model_path = f'ckpt/{model_name}'
+    model_type = RoformerProberChord
+    model = model_type.load_from_checkpoint(model_path, strict=False)
+    model.save_name = os.path.basename(model_path)
+    model.cuda()
+    model.eval()
+    if bass_model_name is not None:
+        bass_model = RoformerProberChord.load_from_checkpoint(bass_model_name, strict=False)
+        bass_model.save_name = os.path.basename(bass_model_name)
+        bass_model.cuda()
+        bass_model.eval()
+    else:
+        bass_model = None
+    return perform_eval(
+        lambda midi_path: model_chord_probe(model, midi_path, n_samples, bass_model=bass_model, batch_size=batch_size),
+        dataset_name, split, f'probe_vote{n_samples}:{model_name}')
+
+
+def main():
+    import argparse
+    args = argparse.ArgumentParser()
+    args.add_argument('model_name', type=str)
+    args.add_argument('--bass_model_name', type=str)
+    args.add_argument('--batch_size', type=int, default=4)
+    args = args.parse_args()
+    perform_eval_probe(args.model_name, args.bass_model_name, 'rwc', 'test', n_samples=1, batch_size=args.batch_size)
+
+if __name__ == '__main__':
+    main()

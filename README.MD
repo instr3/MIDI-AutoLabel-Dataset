@@ -144,3 +144,10 @@ Below is an example screenshot for the predicted chromagram and bass feature map
 
 ![sv_screenshot2.png](screenshots/sv_screenshot_2.png)
 
+### Chord Evaluation Code
+
+To evaluate chord estimation on the test split of RWC (the test split means the test split for supervised methods; the unsupervised method did not see RWC Pop in any stage of training):
+
+```bash
+python chord_eval.py midi-unsupervised-models/cp_transformer_yinyang_probe_encoder_chroma_v0.4_batch_160_la_chords_16_v8_chroma.epoch=00.val_loss=0.15761.ckpt --bass_model_name=ckpt/midi-unsupervised-models/cp_transformer_yinyang_probe_encoder_chroma_v0.5_batch_160_la_bass_16_v2.epoch=00.val_loss=0.10736.ckpt
+```
