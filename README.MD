@@ -51,6 +51,16 @@ Please download the original MIDI files from the [Los Angeles (LA) collection](h
 
 You can render the MIDI files to audio using any MIDI synthesizer. We have a script ``render_midi_to_wav.py`` to render the MIDI files using [FluidSynth](https://www.fluidsynth.org/) and the FluidR3_GM soundfont (download [here](https://member.keymusician.com/Member/FluidR3_GM/index.html)).
 
+### Beat/downbeat Annotations
+
+All the MIDI files are filtered to have a relatively reliable beat annotation. Downbeat annotations are not verified. To acquire the beats and downbeats:
+```
+from pretty_midi_fix import UglyMIDI
+midi = UglyMIDI(midi_path)
+beats, downbeats = midi.get_beats(), midi.get_downbeats()
+```
+Note: Please avoid using the original ``PrettyMIDI`` to load the file, since PrettyMIDI does not handle tempo change events on non-zero tracks (fixed in ``pretty_midi_fix.py``), which are pretty common in the dataset.
+
 ## Pretrained Models
 
 Download the pretrained models from [Google Drive](https://drive.google.com/drive/folders/1OcnNUW4GM_Q1pLxaSEIsEbaKB4XqZMcl?usp=drive_link).
